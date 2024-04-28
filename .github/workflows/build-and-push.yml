@@ -1,0 +1,42 @@
+name: build and push
+
+on:
+  workflow_dispatch:
+
+env:
+  APP_ENV: dev
+  SERVICE_NAME: template-service
+  AWS_ACCOUNT_ID: "878423098926"
+  AWS_REGION: ap-northeast-1
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ${{ env.AWS_REGION }}
+        role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.APP_ENV }}-github-actions-role
+
+    - name: Login to ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - uses: docker/setup-buildx-action@v3
+
+    - name: Build Push to ECR
+      uses: docker/build-push-action@v5
+      with:
+        context: ./app
+        file: ./app/Dockerfile
+        push: true
+        tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.APP_ENV }}-${{ env.SERVICE_NAME }}-api:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.APP_ENV }}-${{ env.SERVICE_NAME }}-api:latest
+        cache-from: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ env.APP_ENV }}-${{ env.SERVICE_NAME }}-api:cache
+        cache-to: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ env.APP_ENV }}-${{ env.SERVICE_NAME }}-api:cache,mode=max,image-manifest=true

@@ -1,0 +1,107 @@
+openapi: 3.0.0
+info:
+  title: Template API
+  version: 1.0.0
+paths:
+  /healthcheck:
+    get:
+      summary: ヘルスチェック
+      responses:
+        '200':
+          description: 成功
+  /users:
+    post:
+      summary: ユーザーを作成
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ユーザ名
+                email:
+                  type: string
+                  description: メールアドレス
+              required:
+                - name
+                - email
+      responses:
+        '201':
+          description: 成功
+        '400':
+          description: リクエストが不正です。
+    get:
+      summary: ユーザ一覧
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+  '/users/{userId}':
+    put:
+      summary: ユーザ編集
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  $ref: '#/components/schemas/User'
+      responses:
+        '204':
+          description: 成功
+    get:
+      summary: ユーザ詳細
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+components:
+  responses: {}
+  schemas:
+    User:
+      title: User
+      description: ユーザ
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ユーザID
+        cognitoUserId:
+          type: string
+          description: cognitoUserId
+        name:
+          type: string
+          description: ユーザ名前
+        email:
+          type: string

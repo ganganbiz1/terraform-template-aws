@@ -1,0 +1,16 @@
+openapi: 3.0.0
+info:
+  title: Template API
+  version: 1.0.0
+paths:
+  /healthcheck:
+    $ref: './paths/healthcheck/healthcheck.yml#/healthcheck'
+  /users:
+    $ref: './paths/users.yml'
+  /users/{userId}:
+    $ref: './paths/users/userId.yml'
+
+components: 
+  responses: {}
+  schemas: 
+    $ref: "./schemas/schemas.yml"
