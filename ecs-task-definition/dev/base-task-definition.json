@@ -1,0 +1,11 @@
+{
+  "family": "dev-task",
+  "executionRoleArn": "arn:aws:iam::878423098926:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "volumes": [],
+  "placementConstraints": [],
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "tags": []
+}

@@ -1,0 +1,38 @@
+put:
+  summary: ユーザ編集
+  parameters:
+    - in: path
+      name: userId
+      required: true
+      schema:
+        type: integer
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            user:
+              $ref: "../../schemas/User.yml"
+  responses:
+    "204":
+      description: 成功
+get:
+  summary: ユーザ詳細
+  parameters:
+    - in: path
+      name: userId
+      required: true
+      schema:
+        type: integer
+  responses:
+     "200":
+      description: 成功
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              user:
+                $ref: "../../schemas/User.yml"

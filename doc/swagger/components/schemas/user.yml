@@ -1,0 +1,15 @@
+title: User
+description: ユーザ
+type: object
+properties:
+  id:
+    type: integer
+    description: ユーザID
+  cognitoUserId:
+    type: string
+    description: cognitoUserId
+  name:
+    type: string
+    description: ユーザ名前
+  email:
+    type: string
